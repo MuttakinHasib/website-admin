@@ -1,0 +1,98 @@
+<md-dialog layout="column" flex="50" aria-label="dialog gcm">
+    <md-toolbar ng-style="{'background' : '#FFFFFF'}">
+        <div class="md-toolbar-tools">
+            <h2>{{dialog_title}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon aria-label="Close dialog">clear</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-divider></md-divider>
+    <form role="form" name="thisForm" id="thisForm" novalidate class="md-padding">
+        <md-dialog-content class="autoScroll" style="max-width:800px;max-height:810px;">
+            <code ng-if="object != null">Reg Id : {{object.regid}} <br><br></code>
+
+            <div layout="row" layout-align="start center">
+                <legend>Type</legend>
+                <span flex="5"></span>
+                <md-radio-group ng-model="body.type" layout="row">
+                    <md-radio-button value="NORMAL" class="md-primary">NORMAL</md-radio-button>
+                    <md-radio-button value="LINK" class="md-primary">LINK</md-radio-button>
+                    <md-radio-button value="IMAGE" class="md-primary">IMAGE</md-radio-button>
+                </md-radio-group>
+            </div>
+
+            <div layout="row">
+                <md-input-container flex="60">
+                    <label>Notification Title</label>
+                    <input required name="title" ng-model="body.title" minlength="2" maxlength="50">
+                    <div ng-messages="thisForm.title.$error">
+                        <div ng-message="required">required.</div>
+                        <div ng-message='minlength'>min length 2.</div>
+                        <div ng-message='maxlength'>max length 50.</div>
+                    </div>
+                </md-input-container>
+            </div>
+
+            <div layout="row">
+                <md-input-container flex="60">
+                    <label>Notification Content</label>
+                    <textarea required name="content" ng-model="body.content" rows="2" maxlength="100"></textarea>
+                    <div ng-messages="thisForm.content.$error">
+                        <div ng-message="required">required.</div>
+                        <div ng-message='minlength'>min length 2.</div>
+                        <div ng-message='maxlength'>max length 100.</div>
+                    </div>
+                </md-input-container>
+            </div>
+
+            <div layout="row" ng-if="body.type=='LINK'">
+                <md-input-container flex="100">
+                    <label>Link URL</label>
+                    <input required name="link" ng-model="body.link" minlength="5" maxlength="1000">
+                    <div ng-messages="thisForm.link.$error">
+                        <div ng-message="required">required.</div>
+                    </div>
+                </md-input-container>
+            </div>
+
+            <div layout="row" ng-if="body.type=='IMAGE'">
+                <md-input-container flex="100">
+                    <label>Image URL</label>
+                    <input required name="image" ng-model="body.image" minlength="5" maxlength="1000">
+                    <div ng-messages="thisForm.image.$error">
+                        <div ng-message="required">required.</div>
+                    </div>
+                </md-input-container>
+            </div>
+
+            <md-divider></md-divider>
+            <br>
+            <!-- result view -->
+            <div ng-if="show_result">
+                <show ng-if="result.status == 'success'">SUCCESS</show>
+                <delete ng-if="result.status == 'failed'">FAILED</delete>
+                <comment>&nbsp;&nbsp;{{result.msg}}</comment>
+            </div>
+            <br>
+            <p class="hint">This data will be displayed on the user's phone notification</p>
+
+        </md-dialog-content>
+
+        <div class="md-actions" layout="row">
+            <span flex></span>
+            <md-button ng-if="!submit_loading" class="md-warn" ng-click="hide()">
+                CANCEL
+            </md-button>
+            <md-button class="md-raised md-accent" ng-if="!submit_loading" ng-disabled="thisForm.$invalid"
+                       ng-click="submit(body)" style="margin-right:20px;">
+                SEND
+            </md-button>
+            <md-progress-circular ng-if="submit_loading" class="md-primary" md-mode="indeterminate"
+                                  md-diameter="30px"></md-progress-circular>
+        </div>
+
+    </form>
+
+</md-dialog>

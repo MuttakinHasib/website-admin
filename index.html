@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>WTN360 Admin Panel</title>
+    <link rel="shortcut icon" type="image/png" href="lib/img/favicon.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="lib/css/angular-material.min.css" rel="stylesheet prefetch" type="text/css"/>
+    <link href="lib/fonts/material.css" rel="stylesheet" type="text/css"/>
+    <link href="lib/css/styles.css" rel="stylesheet" type="text/css"/>
+    <link href='lib/css/font-awesome.min.css' rel='stylesheet prefetch'/>
+    <link rel="stylesheet" href="lib/css/style-ta.css">
+    <link rel="stylesheet" href="lib/css/colorpicker.css">
+    <link rel="stylesheet" href="lib/css/mdPickers.css">
+
+    <script src="lib/js/jquery-3.1.1.min.js"></script>
+    <script src="lib/js/angular-library.js"></script>
+
+    <script src="lib/js/pagination.js"></script>
+    <script src='lib/js/textAngular.js'></script>
+    <script src='lib/js/bootstrap-colorpicker-module.js'></script>
+    <script src='lib/js/moment.js'></script>
+    <script src='lib/js/mdPickers.js'></script>
+
+    <script src="app/app.js"></script>
+    <script src="app/request.js"></script>
+    <script src="app/root.js"></script>
+
+    <script src="controller/login.js"></script>
+    <script src="controller/dashboard/dashboard.js"></script>
+    <script src="controller/news/list.js"></script>
+    <script src="controller/news/create.js"></script>
+    <script src="controller/topic/list.js"></script>
+    <script src="controller/topic/create.js"></script>
+    <script src="controller/comment/list.js"></script>
+    <script src="controller/application/list.js"></script>
+    <script src="controller/notification/history.js"></script>
+    <script src="controller/notification/device.js"></script>
+    <script src="controller/user/list.js"></script>
+    <script src="controller/setting/admin.js"></script>
+    <script src="controller/setting/config.js"></script>
+    <script src="controller/about/about.js"></script>
+
+</head>
+
+<body>
+<div ng-app="App" ng-controller="RootCtrl as ctl" layout="row" layout-fill ng-cloak>
+
+    <!-- Sliding Menu -->
+    <md-sidenav ng-hide="isLogin" class="md-sidenav-left md-whiteframe-z2" role="sidenav" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+        <!-- menu header -->
+        <md-toolbar class="nav-header md-hue-2" layout-align="end end" ng-style="{'background' : bgColorLight}">
+            <div class="md-toolbar-tools" layout>
+
+                <img src="lib/img/ntw_icon.png" alt="logo" class="material-icons md-36">
+                <span flex="5"></span>
+                <div layout="column">
+                    <span class="md-body-2">{{user.name}}</span>
+                    <span class="md-caption">
+                        <admin ng-if="user.role == 'ADMIN'">ADMIN</admin>
+                        <writer ng-if="user.role == 'WRITER'">WRITER</writer>
+                    </span>
+                </div>
+                <span flex></span>
+
+                <md-menu md-position-mode="target-right target" >
+                    <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                        <md-icon ng-style="{color: iconColor}">more_vert</md-icon>
+                    </md-button>
+                    <md-menu-content width=3>
+                        <md-menu-item>
+                            <md-button layout-fill md-ink-ripple ng-click="directHref('#setting')">Setting</md-button>
+                        </md-menu-item>
+
+                        <md-menu-item>
+                            <md-button layout-fill md-ink-ripple ng-click="doLogout($event)">Logout</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+        </md-toolbar>
+
+        <br>
+
+        <!-- SIDE MENU -->
+        <md-content role="navigation" ng-style="{color : menuTextColor}">
+            <div ng-repeat="action in sidenav.actions">
+                <md-list-item ng-click="directHref(action.link)" ng-if="!action.sub">
+                    <md-icon ng-style="{color: iconColor}">{{action.icon}}</md-icon>
+                    <span flex class="md-body-2">{{action.name}}</span>
+                </md-list-item>
+
+                <!-- for handle sub menu -->
+                <md-list-item ng-if="action.sub" ng-click="action.sub_expand = !action.sub_expand">
+                    <md-icon ng-style="{color: iconColor}">{{action.icon}}</md-icon>
+                    <p class="md-body-2">{{action.name}}</p>
+                    <span flex></span>
+                    <md-icon ng-style="{color: iconColor}"
+                             class="md-primary md-icon-button">{{action.sub_expand ? 'arrow_drop_down' : 'arrow_drop_up'}}
+                    </md-icon>
+                </md-list-item>
+                <md-list-item class="sub-menu-bg" ng-show="action.sub_expand" ng-repeat="sub_act in action.sub_menu"
+                              ng-click="subMenuAction($event, sub_act)" ng-style="{'background' : bgColorDark, color : menuTextColor}">
+                    <p class="md-body-2 sub-menu-sidenav">{{sub_act.name}}</p>
+                </md-list-item>
+            </div>
+        </md-content>
+
+    </md-sidenav>
+
+    <div tabindex="-1" layout="column" role="main" class="flex md-layout-column">
+        <md-toolbar ng-hide="isLogin" role="toolbar" ng-style="{'background' : bgColorLight}">
+            <div class="md-toolbar-tools">
+                <!-- toogle button -->
+                <md-button class="md-icon-button" ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
+                    <md-icon ng-style="{color: iconColor}">menu</md-icon>
+                </md-button>
+
+                <!-- toolbar title -->
+                <h4 class="md-title">{{pagetitle}}</h4> <span flex></span>
+
+                <!-- Search layout -->
+                <div layout="row" flex ng-if="search_show" style="background-color:#f8f8f8;padding: 0px 10px 0px 10px;">
+                    <md-icon ng-click="closeSearch($event)" class="click-able">close</md-icon>
+                    <div class="flex" layout="row">
+                        <input ng-model="q" id="search_input" class="search" placeholder="Search" ng-keypress="keypressAction($event, q)">
+                    </div>
+                    <md-icon ng-click="submitSearch($event, q)" class="click-able">search</md-icon>
+                </div>
+
+                <!-- add search action -->
+                <md-button ng-if="search_enable && !search_show" class="md-icon-button" ng-click="searchAction($event)"><md-icon>search</md-icon></md-button>
+
+                <!-- add button -->
+                <md-button ng-if="toolbar_menu != null" class="md-primary" ng-click="barAction($event)">{{toolbar_menu.title}}</md-button>
+
+                <!-- more -->
+                <md-menu md-position-mode="target-right target">
+                    <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                        <md-icon ng-style="{color: iconColor}">more_vert</md-icon>
+                    </md-button>
+                    <md-menu-content width=3>
+                        <md-menu-item><md-button layout-fill md-ink-ripple ng-click="directHref('#setting')">Setting</md-button></md-menu-item>
+                        <md-menu-item><md-button layout-fill md-ink-ripple ng-click="doLogout($event)">Logout</md-button></md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+
+            </div>
+        </md-toolbar>
+
+        <!-- CONTENT PAGE -->
+        <md-content layout md-scroll-y flex class="md-padding custom-section" ng-style="{'background' : bgColor}">
+            <div ng-view layout-fill flex></div>
+        </md-content>
+
+    </div>
+</div>
+</body>
+
+</html>

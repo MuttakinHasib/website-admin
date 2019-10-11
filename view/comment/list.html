@@ -1,0 +1,80 @@
+<md-card class="md-whiteframe-1dp">
+    <div class="table-responsive-vertical">
+        <table id="table" class="table table-hover">
+            <thead>
+            <tr >
+                <th width="2%">No</th>
+                <th width="25%">Comment</th>
+                <th width="3%">News</th>
+                <th width="3%">User</th>
+                <th width="3%">Status</th>
+                <th width="5%">Date</th>
+                <th width="3%" style="text-align:center;">Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr ng-repeat="c in comment track by c.id">
+                <td data-title="No">{{($index+1) + (paging.current * paging.limit) - paging.limit}}</td>
+                <td data-title="Comment">{{c.comment | cut:false:55:' ...' }}</td>
+                <td data-title="News">{{c.news_id}}</td>
+                <td data-title="User">
+                    <div layout="row">
+                        <span>{{c.user_app_id}}</span>
+                        <md-button layout-align="center" class="md-btn-small" ng-click="viewUserApp($event, c.user_app_id)">
+                            <md-icon class="md-ic-small ic-small">search</md-icon>
+                            <md-tooltip>View User</md-tooltip>
+                        </md-button>
+                    </div>
+                </td>
+                <td data-title="Status">
+                    <show ng-if="c.status == 'SHOW'">{{c.status}}</show>
+                    <delete ng-if="c.status == 'DELETED'">{{c.status}}</delete>
+                    <hide ng-if="c.status == 'HIDE'">{{c.status}}</hide>
+                </td>
+                <td data-title="Date">{{c.created_at | date:'dd MMM yy'}}</td>
+                <td data-title="Action">
+                    <md-menu md-position-mode="target-right target">
+                        <md-button class="md-btn-small" ng-click="$mdOpenMenu($event)">
+                            <md-icon class="md-ic-small" ng-style="{'font-size': '15px'}">more_vert</md-icon>
+                        </md-button>
+                        <md-menu-content width=3>
+                            <md-title class="md-padding">
+                                <b>Comment No {{($index+1) + (paging.current * paging.limit) - paging.limit}}</b>
+                            </md-title>
+                            <md-menu-item ng-if="c.status != 'SHOW'">
+                                <md-button layout-fill md-ink-ripple ng-click="changeCommentStatus($event, c, 'SHOW')">
+                                    <md-icon md-class="md-primary" md-menu-align-target>visibility</md-icon>
+                                    Show
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-if="c.status == 'SHOW'">
+                                <md-button layout-fill md-ink-ripple ng-click="changeCommentStatus($event, c, 'HIDE')">
+                                    <md-icon md-class="md-primary" md-menu-align-target>visibility_off</md-icon>
+                                    Hide
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button layout-fill md-ink-ripple ng-click="removeComment($event, c)">
+                                    <md-icon md-class="md-primary" md-menu-align-target>close</md-icon>
+                                    Remove
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div ng-if="loading" style="text-align:center;" colspan="10">
+            <p>Loading</p>
+            <md-progress-linear md-mode="indeterminate"/>
+        </div>
+    </div>
+
+    <!--pagination view-->
+    <section layout="row" class="sub-menu-bg" flex>
+        <cl-paging flex cl-pages="paging.total" , cl-steps="paging.step" , cl-page-changed="paging.onPageChanged()" , cl-align="center center" , cl-current-page="paging.current"/>
+    </section>
+
+</md-card>

@@ -1,0 +1,109 @@
+<div layout-sm="column" layout-md="row" layout-lg="row" layout-gt-lg="row">
+    <md-card flex="100" flex-lg="35" flex-gt-lg="35">
+        <md-input-container flex md-no-float class="header-table-display">
+            <md-select ng-model="topic_id" class="option-plain" aria-label="Topics News">
+                <md-option ng-repeat="c in topic_data" value="{{c.id}}">{{c.name}}</md-option>
+            </md-select>
+        </md-input-container>
+    </md-card>
+    <md-card flex="100" flex-lg="10" flex-gt-lg="10">
+        <md-input-container flex md-no-float class="header-table-display">
+            <md-select ng-model="max_item" class="option-plain" aria-label="Max Item">
+                <md-option ng-repeat="m in max_item_array" value="{{m.value}}">{{m.text}}</md-option>
+            </md-select>
+        </md-input-container>
+    </md-card>
+    <md-card flex="100" flex-lg="15" flex-gt-lg="15">
+        <md-input-container flex md-no-float class="header-table-display">
+            <md-select ng-model="sort_by_selected" class="option-plain" aria-label="Sort By">
+                <md-option ng-repeat="sb in sort_by" value="{{sb.id}}">{{sb.label}}</md-option>
+            </md-select>
+        </md-input-container>
+    </md-card>
+</div>
+
+<md-card class="md-whiteframe-1dp">
+    <div class="table-responsive-vertical">
+        <table id="table" class="table table-hover">
+            <thead class="sub-menu-bg">
+            <tr>
+                <th width="1%">No</th>
+                <th width="1%">ID</th>
+                <th width="20%">Name</th>
+                <th width="5%">Type</th>
+                <th width="1%">View</th>
+                <th width="1%">Featured</th>
+                <th width="3%">Published</th>
+                <th width="5%">Date</th>
+                <th width="3%">Action</th>
+            </tr>
+            </thead>
+            <md-divider></md-divider>
+            <tbody>
+            <tr ng-repeat="n in news track by n.id">
+                <td data-title="No">{{($index+1) + (paging.current * paging.limit) - paging.limit}}</td>
+                <td data-title="Id">{{n.id}}</td>
+                <td data-title="Name">{{n.title | cut:false:45:' ...'}}</td>
+                <td data-title="Type"><grey-tag>{{n.type}}</grey-tag></td>
+                <td data-title="View">{{n.total_view}}</td>
+                <td data-title="Featured">
+                    <md-icon ng-if="n.featured == 1" class="md-ic-small ic-small-grey ic-small-center">fiber_manual_record</md-icon>
+                </td>
+                <td data-title="Published">
+                    <md-icon ng-if="n.draft == 0" class="md-ic-small ic-small-green ic-small-center">check_circle</md-icon>
+                </td>
+                <td data-title="Date">{{n.date | date:'dd MMM yy'}}</td>
+                <td data-title="Action">
+                    <md-menu md-position-mode="target-right target">
+                        <md-button class="md-btn-small" ng-click="$mdOpenMenu($event)">
+                            <md-icon class="md-ic-small" ng-style="{'font-size': '15px'}">more_vert</md-icon>
+                        </md-button>
+                        <md-menu-content width=3>
+                            <md-title class="md-padding">
+                                <b>MENU NO {{($index+1) + (paging.current * paging.limit) - paging.limit}}</b>
+                            </md-title>
+                            <md-menu-item>
+                                <md-button layout-fill md-ink-ripple ng-click="detailsNews($event, n)">
+                                    <md-icon md-class="md-primary" md-menu-align-target>launch</md-icon>
+                                    Details
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button layout-fill md-ink-ripple ng-click="editNews($event, n)">
+                                    <md-icon md-class="md-primary" md-menu-align-target>create</md-icon>
+                                    Edit
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-if="n.draft == 1">
+                                <md-button layout-fill md-ink-ripple ng-click="publishDialog($event, n)">
+                                    <md-icon md-class="md-primary" md-menu-align-target>check_circle</md-icon>
+                                    Publish
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button layout-fill md-ink-ripple ng-click="deleteNews($event, n)">
+                                    <md-icon md-class="md-primary" md-menu-align-target>delete</md-icon>
+                                    Delete
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div ng-if="loading" style="text-align:center;" colspan="10">
+            <p>Loading</p>
+            <md-progress-linear md-mode="indeterminate"/>
+        </div>
+    </div>
+
+    <!--pagination view-->
+    <md-divider></md-divider>
+    <section layout="row" class="sub-menu-bg" flex>
+        <cl-paging flex cl-pages="paging.total" , cl-steps="paging.step" , cl-page-changed="paging.onPageChanged()" ,
+                   cl-align="center center" , cl-current-page="paging.current"/>
+    </section>
+
+</md-card>
+

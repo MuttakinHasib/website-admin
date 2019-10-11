@@ -1,0 +1,83 @@
+<md-dialog layout="column" flex="50" aria-label="dialog news">
+    <md-toolbar ng-style="{'background' : '#FFFFFF'}">
+        <div class="md-toolbar-tools">
+            <h2>{{dialog_title}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon aria-label="Close dialog">clear</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content class="autoScroll" style="max-width:800px;max-height:810px;">
+        <form role="form" name="thisForm" class="md-padding">
+            <div layout="row">
+                <md-input-container flex="30">
+                    <label>Name</label>
+                    <input name="name" minlength="1" maxlength="50" ng-model="user_panel.name" required/>
+                    <div ng-messages="thisForm.name.$error">
+                        <div ng-message='required'>required.</div>
+                        <div ng-message='minlength'>min length 1</div>
+                    </div>
+                </md-input-container>
+                <div flex="5"></div>
+                <md-input-container flex="30">
+                    <label>Email</label>
+                    <input type="email" minlength="5" maxlength="50" name="email" ng-model="user_panel.email" required/>
+                    <div ng-messages="thisForm.email.$error">
+                        <div ng-message='required'>required.</div>
+                        <div ng-message='minlength'>min length 10.</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container flex="30">
+                    <label>Username</label>
+                    <input name="username" minlength="1" maxlength="20" ng-model="user_panel.username" required/>
+                    <div ng-messages="thisForm.username.$error">
+                        <div ng-message='required'>required.</div>
+                        <div ng-message='minlength'>min length 5.</div>
+                    </div>
+                </md-input-container>
+                <div flex="5"></div>
+                <md-input-container flex="30">
+                    <label>Role</label>
+                    <md-select ng-model="user_panel.role">
+                        <md-option ng-repeat="r in roles" value="{{r}}">{{r}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+
+            <div layout="row">
+                <md-input-container flex="30">
+                    <label>Password</label>
+                    <input type="password" name="password" ng-model="user_panel.password" required/>
+                    <div ng-messages="thisForm.password.$error">
+                        <div ng-message='required'>required.</div>
+                    </div>
+                </md-input-container>
+                <div flex="5"></div>
+                <md-input-container flex="30">
+                    <label>Re-Type Password</label>
+                    <input type="password" name="re_password" ng-model="re_password"/>
+                    <div ng-if="!isPasswordMatch()" class="red-alert">Password not match</div>
+                </md-input-container>
+            </div>
+
+            <span class="hint"><b>Username & Password</b> : use alphanumeric and underscore only</span>
+            <br>
+            <br>
+
+            <div layout="row" layout-align="end center" flex="100">
+                <md-button ng-if="!submit_loading"
+                           ng-disabled="!isPasswordMatch() || thisFormUser.$invalid || demo_version || isClean()"
+                           ng-click="submit(user_panel)" class="md-primary">
+                    SAVE
+                </md-button>
+                <md-progress-circular ng-if="submit_loading" class="md-accent" md-mode="indeterminate"
+                                      md-diameter="30px"></md-progress-circular>
+            </div>
+
+        </form>
+    </md-dialog-content>
+</md-dialog>

@@ -1,0 +1,88 @@
+<md-card class="md-whiteframe-1dp md-padding">
+    <div layout="row" layout-sm="column">
+        <md-card-content class="custom-grid c-g-1" flex>
+            <p class="md-title title-no-top">News Statistic</p>
+            <md-divider></md-divider>
+            <div layout="row">
+                <item flex="40">Total View</item> <item flex="5">:</item> <item flex>{{news.total_comment}}</item>
+            </div>
+            <div layout="row">
+                <item flex="40">Total Comment</item> <item flex="5">:</item> <item flex>{{news.total_view}}</item>
+            </div>
+        </md-card-content>
+        <md-card-content class="custom-grid c-g-2" flex>
+            <p class="md-title title-no-top">Topic Information</p>
+            <md-divider></md-divider>
+            <div layout="row">
+                <item flex="40">Published</item> <item flex="5">:</item> <item flex>{{topic.published}}</item>
+            </div>
+            <div layout="row">
+                <item flex="40">Draft</item> <item flex="5">:</item> <item flex>{{topic.draft}}</item>
+            </div>
+        </md-card-content>
+    </div>
+
+    <div layout="row" layout-sm="column">
+        <md-card-content class="custom-grid c-g-3" flex>
+            <p class="md-title title-no-top">News Information</p>
+            <md-divider></md-divider>
+            <div layout="row">
+                <item flex="40">Published</item> <item flex="5">:</item> <item flex>{{news.published}}</item>
+            </div>
+            <div layout="row">
+                <item flex="40">Draft</item> <item flex="5">:</item> <item flex>{{news.draft}}</item>
+            </div>
+            <md-divider></md-divider>
+            <div layout="row">
+                <item flex="40">Article</item> <item flex="5">:</item> <item flex>{{news.ARTICLE}}</item>
+            </div>
+            <div layout="row">
+                <item flex="40">Gallery</item> <item flex="5">:</item> <item flex>{{news.GALLERY}}</item>
+            </div>
+            <div layout="row">
+                <item flex="40">Video</item> <item flex="5">:</item> <item flex>{{news.VIDEO}}</item>
+            </div>
+        </md-card-content>
+        <md-card-content class="custom-grid c-g-4" flex></md-card-content>
+    </div>
+</md-card>
+<br>
+<md-card class="md-whiteframe-1dp md-padding">
+    <div layout="row" layout-sm="column">
+        <md-card-content class="custom-grid cg-b-1" flex>
+            <p class="md-title title-no-top">Setting</p>
+            <md-divider></md-divider>
+            <div layout="row">
+                <item flex="40">Featured News</item> <item flex="5">:</item> <item flex>max {{setting.featured_news}}</item>
+            </div>
+            <div layout="row">
+                <item flex="40">Featured Topic</item> <item flex="5">:</item> <item flex>max {{setting.featured_topic}}</item>
+            </div>
+        </md-card-content>
+        <md-card-content class="custom-grid cg-b-2" flex>
+            <p class="md-title title-no-top">Users</p>
+            <md-divider></md-divider>
+            <div layout="row">
+                <item flex="40">Users App</item> <item flex="5">:</item> <item flex>{{user.app}}</item>
+            </div>
+            <div layout="row">
+                <item flex="40">Notif Device</item> <item flex="5">:</item> <item flex>{{user.notif_device}}</item>
+            </div>
+        </md-card-content>
+    </div>
+    <div layout="row" layout-sm="column">
+        <md-card-content class="custom-grid cg-b-3" flex>
+            <p class="md-title title-no-top">App Version</p>
+            <md-divider></md-divider>
+            <div layout="row">
+                <item flex="40">Active</item> <item flex="5">:</item> <item flex>{{app.active}}</item>
+            </div>
+            <div layout="row">
+                <item flex="40">Inactive</item> <item flex="5">:</item> <item flex>{{app.inactive}}</item>
+            </div>
+        </md-card-content>
+        <md-card-content class="custom-grid cg-b-4" flex></md-card-content>
+    </div>
+</md-card>
+
+<br>

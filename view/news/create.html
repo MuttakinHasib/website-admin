@@ -1,0 +1,111 @@
+<md-card class="md-whiteframe-1dp md-padding">
+    <form role="form" name="thisForm" id="thisForm" novalidate class="md-padding" layout="column">
+
+        <div layout="row">
+            <md-input-container flex="100">
+                <label>News Title *</label>
+                <input required ng-model="news.title" maxlength="200">
+            </md-input-container>
+        </div>
+
+        <div layout="row">
+            <md-input-container flex="30">
+                <label>News Type *</label>
+                <md-select required ng-model="news.type">
+                    <md-option ng-repeat="t in type_array" value="{{t}}">{{t}}</md-option>
+                </md-select>
+            </md-input-container>
+            <span flex="5"></span>
+            <md-input-container flex="30">
+                <label>News Date *</label>
+                <input required ng-model="news_date" type="text" maxlength="100" readonly ng-click="showDatePicker($event)">
+                <md-icon ng-style="{color: iconColor}" style="cursor: pointer;" ng-click="showDatePicker($event)">event</md-icon>
+            </md-input-container>
+        </div>
+
+        <fieldset class="standard margin-input-container" layout="row">
+            <legend>Topic *</legend>
+            <md-input-container flex="100">
+                <div layout="row" layout-wrap>
+                    <div name="topic" flex="50" ng-repeat="i in topic_data">
+                        <md-checkbox ng-checked="isTopicSelected(i, topic_selected)"
+                                     ng-click="toggleTopic(i, topic_selected)" aria-label="i">
+                            <span ng-if="!isTopicSelected(i, topic_selected)">{{i.name}}</span>
+                            <span ng-if="isTopicSelected(i, topic_selected)"><b>{{i.name}}</b></span>
+                        </md-checkbox>
+                    </div>
+                </div>
+                <div ng-if="!topic_valid" class="red-alert">At least choose one topic</div>
+            </md-input-container>
+        </fieldset>
+
+        <br>
+        <legend>Content *</legend>
+        <div text-angular="text-angular" required name="content" ng-model="news.content"></div>
+
+        <br>
+        <fieldset class="standard margin-input-container md-padding">
+            <legend>Primary Image *</legend>
+            <div layout="row" layout-align="center center">
+                <input class="padding-top-bottom" type="file" name="image"
+                       onchange="angular.element(this).scope().onFileSelect(this.files)" flex/>
+                <md-button class="md-icon-button" ng-click="viewImage($event, 'uploads/news/'+news.image)"
+                           ng-if="!isNewEntry()">
+                    <md-icon>wallpaper</md-icon>
+                </md-button>
+            </div>
+            <div ng-if="!image.valid" class="red-alert">JPG or PNG only, max size 1 MB</div>
+        </fieldset>
+
+        <fieldset ng-if="news.type == 'GALLERY'" class="standard margin-input-container" layout="row">
+            <legend>Image Gallery</legend>
+            <div layout="row" layout-align="center center">
+                <input class="padding-top-bottom" type="file" name="image" multiple
+                       onchange="angular.element(this).scope().onGalleryFileSelect(this.files)" flex/>
+
+                <md-button ng-if="images_obj.length > 0">{{images_obj.length}} image(s)</md-button>
+            </div>
+            <div ng-if="!gallery.valid" class="red-alert">JPG or PNG only, max size 1 MB</div>
+            <div ng-if="gallery.empty" class="red-alert">Please select at least one image</div>
+        </fieldset>
+
+        <br>
+        <div layout="row" ng-if="news.type == 'VIDEO'">
+            <md-input-container flex="80" >
+                <label>Video URL</label>
+                <input name="url" ng-model="news.url" maxlength="300">
+                <p class="hint-input">
+                    example : <br>
+                    - https://www.youtube.com/watch?v=fR3Ezf-UZDo<br>
+                    - https://www.domain.com/video/new.mp4<br>
+                    - https://player.vimeo.com/video/338592961<br>
+                    - https://www.dailymotion.com/embed/video/x79tao7
+                </p>
+            </md-input-container>
+        </div>
+
+        <br>
+        <md-divider></md-divider>
+        <br>
+        <md-checkbox ng-model="news.featured" ng-true-value="1" ng-false-value="0">Featured</md-checkbox>
+        <md-checkbox ng-model="news.draft" ng-true-value="1" ng-false-value="0"
+                     ng-change="draftChanged(news.draft)">Save As draft
+        </md-checkbox>
+        <md-checkbox ng-disabled="news.draft==1" ng-model="send_notif">Send Notification to users</md-checkbox>
+        <p class="hint">
+            When you checked <i>Featured</i> the data will display top of android home page.<br>
+            When you checked <i>Save As draft</i> the data will not display at user device.<br/>
+        <br><br>
+        <em> (*) required field</em>
+        <br><br><br>
+        <div layout="row">
+            <span flex></span>
+            <md-button ng-if="!submit_loading" class="md-warn" ng-click="cancel()"> CANCEL</md-button>
+            <md-button ng-if="!submit_loading" ng-disabled="!isReadySubmit() || thisForm.$invalid"
+                       ng-click="submit(news)" class="md-raised"> {{button_text}}
+            </md-button>
+            <md-progress-circular ng-if="submit_loading" class="md-primary" md-mode="indeterminate"
+                                  md-diameter="30px"></md-progress-circular>
+        </div>
+    </form>
+</md-card>

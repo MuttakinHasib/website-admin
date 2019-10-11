@@ -1,0 +1,109 @@
+<md-dialog layout="column" flex="50" aria-label="dialog place">
+    <md-toolbar ng-style="{'background' : '#FFFFFF'}">
+        <div class="md-toolbar-tools">
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon aria-label="Close dialog">clear</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-divider></md-divider>
+    <md-dialog-content class="autoScroll" style="max-width:800px;">
+        <div class="md-dialog-content">
+            <h2>{{news.title}}</h2>
+            <img class="md-center" style="margin: auto; max-width: 100%;max-height: 200px;" ng-src="{{image_url}}" flex>
+            <br/><br/>
+
+            <md-divider class="margin-divider"></md-divider>
+            <div layout="row">
+                <item flex="25">Topic</item>
+                <item flex="5"> :</item>
+                <div layout="row" layout-wrap>
+                    <span ng-repeat="c in topic" style="margin-top: 6px;">
+                        <avail-topic>{{c.name}}</avail-topic>
+                    </span>
+                </div>
+            </div>
+
+            <md-divider class="margin-divider"></md-divider>
+            <div layout="row">
+                <item flex="25">Status</item>
+                <item flex="5"> :</item>
+                <item>
+                    <draft ng-if="news.draft == 1">DRAFT</draft>
+                    <publish ng-if="news.draft != 1">PUBLISHED</publish>
+                </item>
+            </div>
+
+            <div layout="row">
+                <item flex="25">Type</item>
+                <item flex="5"> :</item>
+                <item>{{news.type}}</item>
+            </div>
+
+            <div layout="row">
+                <item flex="25">Featured</item>
+                <item flex="5"> :</item>
+                <item layout="row" layout-align="start center">
+                    <div ng-if="news.featured == 1">YES</div>
+                    <div ng-if="news.featured != 1">NO</div>
+                </item>
+            </div>
+
+            <div layout="row">
+                <item flex="25">Date</item>
+                <item flex="5"> :</item>
+                <item>{{news.date | date:'hh.mm, dd MMMM yyyy'}}</item>
+            </div>
+
+            <md-divider class="margin-divider"></md-divider>
+            <div layout="row">
+                <item flex="25">Total View</item>
+                <item flex="5"> :</item>
+                <item>{{news.total_view}}</item>
+            </div>
+            <div layout="row">
+                <item flex="25">Total Comment</item>
+                <item flex="5"> :</item>
+                <item>{{news.total_comment}}</item>
+            </div>
+            <div layout="row">
+                <item flex="25">Created At</item>
+                <item flex="5"> :</item>
+                <item>{{news.created_at | date:'hh.mm, dd MMMM yyyy'}}</item>
+            </div>
+            <div layout="row">
+                <item flex="25">Last Update</item>
+                <item flex="5"> :</item>
+                <item>{{news.last_update | date:'hh.mm, dd MMMM yyyy'}}</item>
+            </div>
+
+            <div ng-if="news.type=='VIDEO'">
+                <md-divider class="margin-divider"></md-divider>
+                <div layout="row">
+                    <item flex="25">URL</item>
+                    <item flex="5"> :</item>
+                    <item><a ng-if="news.url != ''" href="{{news.url}}">{{news.url}}</a></item>
+                </div>
+            </div>
+
+            <div ng-if="news.type=='GALLERY'">
+                <md-divider class="margin-divider"></md-divider>
+                <div layout="row">
+                    <p flex="25">Gallery</p> <p flex="5"> : </p>
+                </div>
+                <section class="card">
+                    <div class="card--content" ng-repeat="g in gallery">
+                        <img src="uploads/news/{{g.name}}">
+                    </div>
+                </section>
+            </div>
+
+            <md-divider class="margin-divider"></md-divider>
+            <div layout="row">
+                <item flex="25">Content</item> <item flex="5"> : </item>
+            </div>
+            <div ng-bind-html="news.content"></div>
+        </div>
+    </md-dialog-content>
+</md-dialog>

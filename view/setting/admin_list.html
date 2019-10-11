@@ -1,0 +1,54 @@
+<md-card class="md-whiteframe-1dp">
+    <div class="table-responsive-vertical">
+        <table id="table" class="table table-hover">
+            <thead>
+            <tr>
+                <th width="2%">No</th>
+                <th width="20%">Name</th>
+                <th width="30%">Username</th>
+                <th width="10%">Role</th>
+                <th width="10%">Update</th>
+                <th width="5%" style="text-align:center;">Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr ng-repeat="up in user_panel track by up.id">
+                <td data-title="No">{{($index+1) + (paging.current * paging.limit) - paging.limit}}</td>
+                <td data-title="Name">{{up.name}}</td>
+                <td data-title="Username">{{up.username}}</td>
+                <td data-title="Role">
+                    <admin ng-if="up.role == 'ADMIN'">ADMIN</admin>
+                    <writer ng-if="up.role == 'WRITER'">WRITER</writer>
+                </td>
+                <td data-title="Update">{{up.last_update | date:'dd MMM yy'}}</td>
+                <td data-title="Action">
+                    <div layout="row" layout-align="center">
+                        <md-button layout-align="center" class="md-btn-small"
+                                   ng-click="manageAdministrator($event, up.id)">
+                            <md-icon class="md-ic-small ic-small">create</md-icon>
+                            <md-tooltip>Edit Item</md-tooltip>
+                        </md-button>
+                        <md-button ng-disabled="cur_id==up.id" layout-align="center" class="md-btn-small"
+                                   ng-click="deleteUserPanel($event, up)">
+                            <md-icon class="md-ic-small ic-small">delete</md-icon>
+                            <md-tooltip>Delete Item</md-tooltip>
+                        </md-button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div ng-if="loading" style="text-align:center;" colspan="10">
+            <p>Loading</p>
+            <md-progress-linear md-mode="indeterminate"/>
+        </div>
+    </div>
+
+</md-card>
+
+<!--pagination view-->
+<section layout="row" flex>
+    <cl-paging flex cl-pages="paging.total" , cl-steps="paging.step" , cl-page-changed="paging.onPageChanged()" ,
+               cl-align="center center" , cl-current-page="paging.current"/>
+</section>

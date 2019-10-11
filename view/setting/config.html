@@ -1,0 +1,41 @@
+<md-card class="md-whiteframe-1dp md-padding">
+    <md-card-content>
+        <form role="form" name="thisForm">
+            <h2 class="md-title">Application Setting</h2>
+            <md-divider></md-divider>
+            <p class="hint">
+                <b>Feature News</b> : Maximum Featured News display on home android app. Recommended value is 5-10
+            </p>
+            <br>
+
+            <div layout="row" layout-align="start center">
+                <md-input-container flex="15">
+                    <label>Featured News</label>
+                    <input type="number" required ng-model="conf_featured_news">
+                </md-input-container>
+            </div>
+
+            <p class="hint">
+                <b>Feature Topic</b> : Maximum Featured Topic display on home android app. Recommended value is 10-20
+            </p>
+            <div layout="row" layout-align="start center">
+                <md-input-container flex="30">
+                    <label>Featured Topic</label>
+                    <input type="number" required ng-model="conf_featured_topic">
+                </md-input-container>
+            </div>
+            <br><br>
+
+            <div layout="row" layout-align="end center" flex="100">
+                <md-button ng-if="!submit_loading_conf" ng-disabled="thisForm.$invalid || !isReadySubmitConf()"
+                           ng-click="submitConf()" class="md-raised md-accent">
+                    SAVE
+                </md-button>
+                <md-progress-circular ng-if="submit_loading_conf" class="md-accent" md-mode="indeterminate"
+                                      md-diameter="30px"></md-progress-circular>
+            </div>
+
+        </form>
+    </md-card-content>
+</md-card>
+<br>

@@ -1,0 +1,78 @@
+<md-card class="md-whiteframe-1dp md-padding">
+    <form role="form" name="thisForm" id="thisForm" novalidate class="md-padding">
+
+        <div layout="row">
+            <md-input-container flex="30">
+                <label>Topic Name *</label>
+                <input required name="name" ng-model="topic.name" maxlength="20">
+            </md-input-container>
+        </div>
+
+        <div layout="row" layout-align="start start">
+            <md-input-container flex="10">
+                <label>Color *</label>
+                <input colorpicker required name="color" ng-model="topic.color" maxlength="7" readonly>
+            </md-input-container>
+            <div style="width:180px;background-color:{{topic.color}};margin:15px;color:#FFFFFF;padding:8px;font-size:10pt;">
+                <b>Topic Name Text</b>
+            </div>
+            <p class="hint">
+                <i>Color that contrast with white will be easy read by user, <br>see example display at left color box</i>
+            </p>
+        </div>
+
+        <div layout="row" layout-align="start start">
+            <md-input-container flex="10">
+                <label>Priority *</label>
+                <input type="number" required name="priority" ng-model="topic.priority" maxlength="5">
+            </md-input-container>
+            <p class="hint" style="margin-left: 15px;"><i>Priority determines the order of the list of topics in android,<br>order by priority
+                <b>ASCENDING</b></i></p>
+        </div>
+
+        <fieldset class="standard margin-input-container md-padding">
+            <legend>Icon *</legend>
+            <div layout="row" layout-align="center center">
+                <input class="padding-top-bottom" type="file" name="icon"
+                       onchange="angular.element(this).scope().onFileSelect(this.files)" flex/>
+                <md-button class="md-icon-button" ng-click="viewImage($event, 'uploads/topic/'+topic.icon)"
+                           ng-if="!isNewEntry()">
+                    <md-icon>wallpaper</md-icon>
+                </md-button>
+            </div>
+            <div ng-if="!icon.valid" class="red-alert">PNG only, max size 0.5MB</div>
+
+            <p class="hint">
+                1. Image Ratio is 1:1, recommended size is W:200px H:200px<br>
+                2. Image with single color (<i>Monochrome</i>) </i><br>
+                3. Transparent background<br><br>
+                <a target="_blank" href="http://blog.dream-space.web.id/?p=146">Full Icon Guide</a>
+            </p>
+        </fieldset>
+
+        <br>
+        <md-divider></md-divider>
+        <br>
+        <div layout="column">
+            <md-checkbox ng-model="topic.featured" ng-true-value="1" ng-false-value="0">Featured</md-checkbox>
+            <md-checkbox ng-model="topic.draft" ng-true-value="1" ng-false-value="0">Save As draft</md-checkbox>
+        </div>
+
+        <p class="hint">When you checked Featured the data will display bottom of android home page.
+            <br/>When you checked <i>Save As draft</i> the data will not display at user device.
+        </p>
+
+        <br><br>
+        <em> (*) required field</em>
+
+        <div class="md-actions md-padding" layout="row">
+            <span flex></span>
+            <md-button ng-if="!submit_loading" class="md-warn" ng-click="cancel()"> CANCEL</md-button>
+            <md-button ng-if="!submit_loading" ng-disabled="!isReadySubmit() || thisForm.$invalid"
+                       ng-click="submit(topic)" class="md-raised"> {{button_text}}
+            </md-button>
+            <md-progress-circular ng-if="submit_loading" class="md-accent" md-mode="indeterminate"
+                                  md-diameter="30px"></md-progress-circular>
+        </div>
+    </form>
+</md-card>
